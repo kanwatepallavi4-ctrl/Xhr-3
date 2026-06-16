@@ -23,9 +23,8 @@ function snackbar(msg,icon){
 function createcard(arr){
     let res=' ';
     arr.forEach(ele => {
-        res += `<div class="col-md-6 " id=${ele.id}>
+        res += `<div class="col-md-4" id=${ele.id}>
                     <div class="card">
-                        <div class="card-body">
                             <div class="card-header">
                                 <h3>${ele.title}</h3>
                             </div>
@@ -96,7 +95,7 @@ function onPostSubmit(eve){
                                  <H3>${postObj.title} </H3>                           
                                   </div>
                                    <div class="card-body">
-                                     ${postObj.body}
+                                     <p>${postObj.body}</p>
                                     </div>
                                  <div class="card-footer d-flex justify-content-between">
                                   <button onclick="onEdit(this)" class="btn btn-inline-block btn-outline-primary">Edit</button>
@@ -141,7 +140,7 @@ function onRemove(ele){
 
 function onEdit(ele){ 
     let editId= ele.closest('.col-md-4').id ;
-    localStorage.setItem('EditId', editId);      
+    localStorage.setItem('editId', editId);      
     // let editObj = postArr.find(post =>post) 
     let Edit_url = `${base_url}/posts/${editId}`;
     
@@ -156,8 +155,8 @@ function onEdit(ele){
         
         xhr.onload =function (){ 
           if(xhr.status>=200 && xhr.status<=299){
-                       let EditObj=  JSON.parse(xhr.response)
-                         console.log(xhr.response);
+                let EditObj=  JSON.parse(xhr.response)
+                console.log(xhr.response);
                
                 titlecontrol.value  = EditObj.title ;
                 bodycontrol.value   = EditObj.body ;
@@ -167,8 +166,9 @@ function onEdit(ele){
                 updateBtn.classList.remove('d-none');  
                 spinner.classList.add('d-none')
               }else{ 
-                 snackbar('Data is not patched', 'error');
                 spinner.classList.add('d-none')
+                 snackbar('Data is not patched', 'error');
+                
 
               }
         } 
@@ -198,11 +198,25 @@ function onUpdate(){
       if(xhr.status>=200 && xhr.status<=200){ 
        let res = xhr.response; 
            let col= document.getElementById(updateId); 
-            let h3= col.querySelector('.card-header h3')
-               h3.innerText= updateObj.title;
-           
-            let p= col.querySelector('.card-header p')
-                p.innerText= updateObj.body;   
+            col.innerHTML = `<div class="card h-100">
+                            <div class="card-header">
+                                <h3>${updateObj.title}</h3>
+                            </div>
+                            <div class="card-body">
+                                ${updateObj.body}
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <button onclick="onEdit(this)" class="btn btn-outline-primary btn-sm">Edit</button>
+                                <button  onclick="onRemove(this)" class="btn btn-outline-danger btn-sm">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+
+                addpost.classList.remove('d-none'); 
+                updateBtn.classList.add('d-none');  
+                spinner.classList.add('d-none') 
+                postform.reset() 
 
             console.log(res); 
             
@@ -216,4 +230,5 @@ function onUpdate(){
 
 
 postform.addEventListener('submit', onPostSubmit)
+postform.addEventListener('click', onUpdate)
  
