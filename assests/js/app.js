@@ -23,8 +23,8 @@ function snackbar(msg,icon){
 function createcard(arr){
     let res=' ';
     arr.forEach(ele => {
-        res += `<div class="col-md-4" id=${ele.id}>
-                    <div class="card">
+        res += `<div class="col-md-4 mb-4" id=${ele.id}>
+                    <div class="card h-100 ">
                             <div class="card-header">
                                 <h3>${ele.title}</h3>
                             </div>
@@ -88,7 +88,7 @@ function onPostSubmit(eve){
               postform.reset();
          
            let col=document.createElement('div');
-               col.className  = 'col-md-4 mb-3'; 
+               col.className  = 'col-md-4 mb-4'; 
                col.id         = resp.id;
                col.innerHTML  = ` <div class="card">
                                  <div class="card-header">
@@ -230,5 +230,5 @@ function onUpdate(){
 
 
 postform.addEventListener('submit', onPostSubmit)
-postform.addEventListener('click', onUpdate)
+updateBtn.addEventListener('click', onUpdate)
  
